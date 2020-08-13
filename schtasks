@@ -1,0 +1,3 @@
+schtasks /Create /SC DAILY /TN startRedis /TR d:/xdShell/startRedis.bat /ST 09:00 创建。
+schtasks /Create /SC WEEKLY /D MON,TUE,WED,THU,FRI /TN startRedis /TR d:/xdShell/startRedis.bat /ST 09:00 创建周一到周五运行的定时任务，mon和tue之间不能有空格。
+schtasks /Run /I /TN startRedis  试运行。
