@@ -1,3 +1,3 @@
 c:
-cd c:/code/ide/redis_windows
+cd c:/software/redis_windows
 redis-server.exe

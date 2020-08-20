@@ -1,3 +1,3 @@
 c:
-cd c:/code/ide/nacos/bin
+cd c:/software/nacos/bin
 startup.cmd
