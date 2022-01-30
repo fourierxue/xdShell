@@ -1,0 +1,172 @@
+" Vim with all enhancements
+source $VIMRUNTIME/vimrc_example.vim
+
+" Use the internal diff if available.
+" Otherwise use the special 'diffexpr' for Windows.
+if &diffopt !~# 'internal'
+  set diffexpr=MyDiff()
+endif
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg1 = substitute(arg1, '!', '\!', 'g')
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg2 = substitute(arg2, '!', '\!', 'g')
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let arg3 = substitute(arg3, '!', '\!', 'g')
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      if empty(&shellxquote)
+        let l:shxq_sav = ''
+        set shellxquote&
+      endif
+      let cmd = '"' . $VIMRUNTIME . '\diff"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  let cmd = substitute(cmd, '!', '\!', 'g')
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+  if exists('l:shxq_sav')
+    let &shellxquote=l:shxq_sav
+  endif
+endfunction
+
+"以下都是自己的配置
+"插件{{{
+set nocompatible              " 去除VI一致性,必须
+filetype off                  " 必须
+
+"git的vim或者linux的vim使用下面两种配置方式
+"set rtp+=/c/software/vim/vimfiles/bundle/Vundle.vim/
+"call vundle#begin('/c/software/vim/vimfiles/bundle/')
+"set rtp+=~/.vim/bundle/Vundle.vim/
+"call vundle#begin()
+"
+" 设置包括vundle和初始化相关的runtime path
+set rtp+=$VIM/vimfiles/bundle/Vundle.vim/
+call vundle#begin('$VIM/vimfiles/bundle/')
+" 另一种选择, 指定一个vundle安装插件的路径
+"call vundle#begin('~/some/path/here')
+
+" 让vundle管理插件版本,必须
+Plugin 'VundleVim/Vundle.vim'
+
+" 以下范例用来支持不同格式的插件安装.
+" 请将安装插件的命令放在vundle#begin和vundle#end之间.
+" Github上的插件
+" 格式为 Plugin '用户名/插件仓库名'
+"Plugin 'tpope/vim-fugitive'xd
+" 来自 http://vim-scripts.org/vim/scripts.html 的插件
+" Plugin '插件名称' 实际上是 Plugin 'vim-scripts/插件仓库名' 只是此处的用户名可以省略
+"Plugin 'L9'xd
+" 由Git支持但不再github上的插件仓库 Plugin 'git clone 后面的地址'
+"Plugin 'git://git.wincent.com/command-t.git'xd
+" 本地的Git仓库(例如自己的插件) Plugin 'file:///+本地插件仓库绝对路径'
+"Plugin 'file:///home/gmarik/path/to/plugin'xd
+" 插件在仓库的子目录中.
+" 正确指定路径用以设置runtimepath. 以下范例插件在sparkup/vim目录下
+"Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}xd
+" 安装L9，如果已经安装过这个插件，可利用以下格式避免命名冲突
+"Plugin 'ascenator/L9', {'name': 'newL9'}xd
+
+Plugin 'mattn/calendar-vim'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'scrooloose/nerdtree'
+"Plugin 'terryma/vim-multiple-cursors'
+Plugin 'vimwiki'
+"中文帮助文档插件，安装后:help命令将打开中文帮助文档
+Plugin 'yianwillis/vimcdoc'
+Plugin 'vim-scripts/matrix.vim--Yang'
+"Plugin 'mattn/emmet-vim'
+"Plugin 'scrooloose/nerdcommenter'
+Plugin 'vim-bgimg'
+Plugin 'plasticboy/vim-markdown'
+"下面这个插件需要python2支持
+"Plugin 'isnowfy/python-vim-instant-markdown'
+
+" 你的所有插件需要在下面这行之前
+call vundle#end()            " 必须
+filetype plugin indent on    " 必须 加载vim自带和插件相应的语法和文件类型相关脚本
+" 忽视插件改变缩进,可以使用以下替代:
+"filetype plugin on
+"
+" 简要帮助文档
+" :PluginList       - 列出所有已配置的插件
+" :PluginInstall    - 安装插件,追加 `!` 用以更新或使用 :PluginUpdate
+" :PluginSearch foo - 搜索 foo ; 追加 `!` 清除本地缓存
+" :PluginClean      - 清除未使用插件,需要确认; 追加 `!` 自动批准移除未使用插件
+"
+" 查阅 :h vundle 获取更多细节和wiki以及FAQ
+" 将你自己对非插件片段放在这行之后
+" }}}
+
+"let g:calendar_diary="C:/data/diary"
+"\ 'template_default': 'def_template',设置生成html的默认模板
+let g:vimwiki_list = [{'path': 'C:/data/VimWiki/my_site/', 'auto_export': 1,
+    \ 'path_html': 'C:/data/VimWiki/public_html',
+    \ 'template_path': 'C:/data/VimWiki/template',
+    \ 'template_default': 'def_template',
+    \ 'template_ext': '.html'}]
+map <leader>tt <Plug>VimwikiToggleListItem
+
+syntax enable
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set background=dark
+colorscheme solarized
+
+" Lang & Encoding {{{
+set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
+set encoding=utf-8
+"set langmenu=zh_CN
+"let $LANG = 'en_US.UTF-8'
+"language messages zh_CN.UTF-8
+"下面两行解决菜单栏乱码
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+" }}}
+
+"Starpup{{{
+filetype indent plugin on
+
+"vim文件折叠方式为marker
+augroup ft_vim
+	au!
+
+	au FileType vim setlocal foldmethod=marker
+augroup END
+"}}}
+
+"General{{{
+set nobackup
+set noundofile
+"vim的默认寄存器和系统剪贴板共享
+set clipboard+=unnamed
+"设置alt键不映射到菜单栏
+set winaltkeys=no
+"}}}
+
+"{{{GUI
+"不显示工具栏
+set guioptions-=T
+"不显示菜单栏
+set guioptions-=m
+"设置窗口大小
+set lines=60 columns=230
+"显示行号
+set number
+"突出显示当前行
+set cursorline
+"设置字体字号
+set guifont=courier_new:h10  
+"}}}
