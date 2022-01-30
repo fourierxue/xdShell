@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>使用jsencrypt执行OpenSSL的RSA加密，解密</title>
+</head>
+<!--引入jsencrypt.js-->
+<script src="https://cdn.bootcss.com/jsencrypt/3.0.0-beta.1/jsencrypt.js"></script>
+<script type="text/javascript">
+//与子系统交互的公钥，用来加密传输给子系统的登陆密码
+//var PUBLIC_KEY = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDNmejtNLOa8l+umi4cDuv33vFthAYhkt0jxUSW90NknmywgLzXHHz8JfbmQU5Ywro5McyMDBtImT9Sr9qEcagvGgFGqq/tuOi+gBb5EVlinH4ziSaMBjgfAK+qnOlpWbWMDgEXvcoOkhr90263WlI3LQF5kUtHsj1FBVLspcJNwQIDAQAB';
+//教培系统（云化版本、私有化版本）公钥
+//var PUBLIC_KEY = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5CuTliaJJzmYeJCvJ/tjCXeu8x3fJNqJa9NpENhOmpHgh1WxyeNfg29V2DIVS3xx4GTUMDPo4bZ/xBtwo2GO760cn3JgaUgn2U+mgBmHi1sH80MRcSaYheHDsX6mwr/q7/3RV8b6H+J/D+/iDzJMpXBZY+1h+uqnvuPqejr8i6wIDAQAB';
+//spn_portal_backend公钥
+var PUBLIC_KEY = 'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQC5CuTliaJJzmYeJCvJ/tjCXeu8x3fJNqJa9NpENhOmpHgh1WxyeNfg29V2DIVS3xx4GTUMDPo4bZ/xBtwo2GO760cn3JgaUgn2U+mgBmHi1sH80MRcSaYheHDsX6mwr/q7/3RV8b6H+J/D+/iDzJMpXBZY+1h+uqnvuPqejr8i6wIDAQAB';
+//使用公钥加密
+var encrypt = new JSEncrypt();
+//encrypt.setPrivateKey('-----BEGIN RSA PRIVATE KEY-----'+PRIVATE_KEY+'-----END RSA PRIVATE KEY-----');
+encrypt.setPublicKey('-----BEGIN PUBLIC KEY-----' + PUBLIC_KEY + '-----END PUBLIC KEY-----');
+var str = "SpnAZ@147"
+var encrypted = encrypt.encrypt(str);
+console.log('加密前数据:%o', str);
+console.log('加密后数据:%o', encrypted);
+</script>
+
+</html>
